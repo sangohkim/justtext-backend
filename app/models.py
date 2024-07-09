@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
@@ -15,6 +16,8 @@ class User(Base):
     created_at = Column(TIMESTAMP, nullable=False, index=True)
     deleted_at = Column(TIMESTAMP)
 
+    post = relationship("Post", back_populates="user")
+
 
 class Post(Base):
     __tablename__ = 'Post'
@@ -27,3 +30,5 @@ class Post(Base):
     created_at = Column(TIMESTAMP, nullable=False, index=True)
     updated_at = Column(TIMESTAMP)
     deleted_at = Column(TIMESTAMP)
+
+    user = relationship("User", back_populates="post")
