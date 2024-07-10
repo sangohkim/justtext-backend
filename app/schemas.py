@@ -23,7 +23,8 @@ class User(UserBase):
 
 class PostBase(BaseModel):
     title: str
-    content: Optional[str] = None
+    content: str
+    is_anon: bool
 
 class PostCreate(PostBase):
     pass

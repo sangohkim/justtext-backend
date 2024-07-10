@@ -1,6 +1,6 @@
 # DB table을 object로
 
-from sqlalchemy import Column, Integer, String, TIMESTAMP, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
@@ -32,5 +32,6 @@ class Post(Base):
     created_at = Column(TIMESTAMP, nullable=False, index=True)
     updated_at = Column(TIMESTAMP)
     deleted_at = Column(TIMESTAMP)
+    is_anon = Column(Boolean, nullable=False, default=False)
 
     user = relationship("User", back_populates="post")

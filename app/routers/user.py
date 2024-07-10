@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from .. import models, schemas, auth
+from .. import models, auth, schemas
 from ..database import get_db
 
 from datetime import datetime, timedelta
@@ -9,6 +9,7 @@ import pytz
 
 
 router = APIRouter()
+
 
 @router.post('/user/register', response_model=schemas.User)
 def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
