@@ -1,3 +1,5 @@
+# DB table을 object로
+
 from sqlalchemy import Column, Integer, String, TIMESTAMP, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
