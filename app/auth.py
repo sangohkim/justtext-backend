@@ -24,7 +24,7 @@ def get_password_hash(password):
 
 def authenticate_user(db: Session, name: str, password: str):
     user = db.query(models.User).filter(models.User.name == name).first()
-    if not user or not verify_password(password, user.pw):
+    if not user or not verify_password(password, user.pw) or user.deleted_at:
         return False
     return user
 

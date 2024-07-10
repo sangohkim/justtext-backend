@@ -10,9 +10,6 @@ app = FastAPI()
 app.include_router(user.router)
 app.include_router(post.router)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
 if __name__ == "__main__":
     import uvicorn

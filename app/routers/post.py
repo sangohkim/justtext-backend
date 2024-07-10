@@ -22,8 +22,9 @@ def create_post(post: schemas.PostCreate, db: Session = Depends(get_db), current
 
 
 @router.patch('/post/update/{post_id}', response_model=schemas.Post)
-def update_post(post_id: int, post: schemas.PostCreate, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id, models.Post.user_id == current_user.id).first()
+def update_post(post_id: int, post: schemas.PostUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    # soft delete를 고려
+    db_post = db.query(models.Post).filter(models.Post.id == post_id, models.Post.user_id == current_user.id, models.Post.deleted_at.is_(None) == True).first()
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found. Invalid post_id")
     if len(db_post.title) == 0 or len(db_post.content) == 0:
@@ -39,7 +40,7 @@ def update_post(post_id: int, post: schemas.PostCreate, db: Session = Depends(ge
 # Soft delete
 @router.patch('/post/delete/{post_id}')
 def delete_post(post_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id, models.Post.user_id == current_user.id).first()
+    db_post = db.query(models.Post).filter(models.Post.deleted_at.is_(None) == True, models.Post.id == post_id, models.Post.user_id == current_user.id).first()
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
     db_post.deleted_at = datetime.now(pytz.UTC)
@@ -49,7 +50,8 @@ def delete_post(post_id: int, db: Session = Depends(get_db), current_user: model
 
 @router.get('/post/{post_id}', response_model=schemas.Post)
 def read_post(post_id: int, db: Session = Depends(get_db)):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    # soft delete 고려
+    db_post = db.query(models.Post).filter(models.Post.id == post_id, models.Post.deleted_at.is_(None) == True).first()
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
     return db_post

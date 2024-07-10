@@ -24,9 +24,11 @@ class User(UserBase):
 class PostBase(BaseModel):
     title: str
     content: str
-    is_anon: bool
 
 class PostCreate(PostBase):
+    is_anon: bool
+
+class PostUpdate(PostBase):
     pass
 
 class Post(PostBase):
@@ -36,6 +38,7 @@ class Post(PostBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
+    is_anon: bool
 
     class Config:
         from_attributes = True
